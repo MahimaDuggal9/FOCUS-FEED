@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: focus-feed-backend
+    env: node
+    plan: free
+    region: virginia
+    buildCommand: yarn install
+    startCommand: yarn start
+    envVars:
+      - key: PORT
+        value: "5000"
+      - key: API_KEY
+        value: "16d3006785084ba0953f2d0b3d9abb68"
