@@ -5,20 +5,15 @@ const sortBy = "publishedAt";
 
 // Notification function to display notifications
 function displayNotification(title, body) {
-    // Check if the browser supports notifications
     if (!("Notification" in window)) {
-        console.error("This browser does not support desktop notification");
+        console.error("This browser does not support desktop notifications");
         return;
     }
 
-    // Check if the user has granted permission for notifications
     if (Notification.permission === "granted") {
-        // If permission is granted, create and display the notification
         new Notification(title, { body: body });
     } else if (Notification.permission !== "denied") {
-        // If permission is not denied, request permission from the user
-        Notification.requestPermission().then(function (permission) {
-            // If the user grants permission, create and display the notification
+        Notification.requestPermission().then(permission => {
             if (permission === "granted") {
                 new Notification(title, { body: body });
             }
@@ -28,20 +23,23 @@ function displayNotification(title, body) {
 
 // Function to fetch news and display notifications
 async function fetchNewsAndNotify(query) {
-    const promises = categories.map(category => {
-        const url = `${baseUrl}${query}+${category}&apiKey=${API_KEY}&sortBy=${sortBy}`;
-        return fetch(url)
-            .then(response => response.json());
-    });
-    
-    Promise.all(promises)
-        .then(dataArray => {
-            bindData(dataArray);
+    try {
+        const promises = categories.map(category => {
+            const url = `${baseUrl}${query}+${category}&apiKey=${API_KEY}&sortBy=${sortBy}`;
+            console.log('Fetching URL:', url);  // Log the URL being fetched
+            return fetch(url).then(response => response.json());
+        });
+        
+        const dataArray = await Promise.all(promises);
+        console.log('Fetched Data Array:', dataArray);  // Log the fetched data
 
-            // Example: Display notification when new articles are loaded
-            displayNotification("New Articles", "New articles have been loaded!");
-        })
-        .catch(error => console.error('Error:', error));
+        bindData(dataArray);
+
+        // Display notification when new articles are loaded
+        displayNotification("New Articles", "New articles have been loaded!");
+    } catch (error) {
+        console.error('Error fetching news:', error);
+    }
 }
 
 function reload() {
@@ -49,17 +47,20 @@ function reload() {
 }
 
 async function fetchNews(query) {
-    const promises = categories.map(category => {
-        const url = `${baseUrl}${query}+${category}&apiKey=${API_KEY}&sortBy=${sortBy}`;
-        return fetch(url)
-            .then(response => response.json());
-    });
-    
-    Promise.all(promises)
-        .then(dataArray => {
-            bindData(dataArray);
-        })
-        .catch(error => console.error('Error:', error));
+    try {
+        const promises = categories.map(category => {
+            const url = `${baseUrl}${query}+${category}&apiKey=${API_KEY}&sortBy=${sortBy}`;
+            console.log('Fetching URL:', url);  // Log the URL being fetched
+            return fetch(url).then(response => response.json());
+        });
+        
+        const dataArray = await Promise.all(promises);
+        console.log('Fetched Data Array:', dataArray);  // Log the fetched data
+
+        bindData(dataArray);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+    }
 }
 
 function bindData(dataArray) {
@@ -68,14 +69,25 @@ function bindData(dataArray) {
 
     cardsContainer.innerHTML = "";
 
+    let hasArticles = false;
+
     dataArray.forEach(data => {
+        if (data.articles.length === 0) {
+            console.warn('No articles found for category');
+        }
+        
         data.articles.forEach(article => {
             if (!article.urlToImage) return;
+            hasArticles = true;
             const cardClone = newsCardTemplate.content.cloneNode(true);
             fillDataInCard(cardClone, article);
             cardsContainer.appendChild(cardClone);
         });
     });
+
+    if (!hasArticles) {
+        cardsContainer.innerHTML = "<p>No articles found</p>";
+    }
 }
 
 function fillDataInCard(cardClone, article) {
@@ -103,7 +115,7 @@ let curSelectedNav = null;
 function onNavItemClick(id) {
     fetchNews(id);
     const navItem = document.getElementById(id);
-    curSelectedNav?.classList.remove("active");
+    if (curSelectedNav) curSelectedNav.classList.remove("active");
     curSelectedNav = navItem;
     curSelectedNav.classList.add("active");
 }
@@ -112,12 +124,15 @@ const searchButton = document.getElementById("search-button");
 const searchText = document.getElementById("search-text");
 
 searchButton.addEventListener("click", () => {
-    const query = searchText.value;
+    const query = searchText.value.trim();
     if (!query) return;
     fetchNews(query);
-    curSelectedNav?.classList.remove("active");
+    if (curSelectedNav) curSelectedNav.classList.remove("active");
     curSelectedNav = null;
 });
 
-// Fetch news and display notifications on page load
+document.getElementById("login-text").addEventListener("click", () => {
+    window.location.href = "login.html";
+});
+
 window.addEventListener("load", () => fetchNewsAndNotify("India"));

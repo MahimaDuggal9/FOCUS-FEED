@@ -1,40 +1,51 @@
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+app.use(bodyParser.json());
 
-// Store connected clients
-const clients = {};
 
-io.on('connection', (socket) => {
-    console.log('New client connected: ' + socket.id);
-
-    // Store the client's socket
-    clients[socket.id] = socket;
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected: ' + socket.id);
-        // Remove client from clients object
-        delete clients[socket.id];
-    });
+mongoose.connect('mongodb://localhost:27017/focus-feed', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 });
 
-// Sample route to trigger notifications
-app.get('/send-notification', (req, res) => {
-    // Emit event to all connected clients
-    io.emit('notification', 'New breaking news!');
-    res.send('Notification sent');
+const UserSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
 });
 
-// Route to handle requests to the root URL
-app.get('/', (req, res) => {
-    res.send('Welcome to the server!');
+const User = mongoose.model('User', UserSchema);
+
+app.post('/register', async (req, res) => {
+    const { username, email, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match');
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({
+            username,
+            email,
+            password: hashedPassword,
+        });
+
+        await user.save();
+        res.status(201).send('User registered successfully');
+    } catch (error) {
+        console.error('Registration error:', error);  
+        res.status(500).send('Registration failed: ' + error.message);  
+    }
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

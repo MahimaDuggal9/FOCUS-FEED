@@ -5,15 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOCUS FEED</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
     <nav>
         <div class="main-nav container flex">
-           
-                <img src="focus.png" alt="FOCUS FEED" width="150" height="60">
-           
+            <img src="focus.png" alt="FOCUS FEED" width="150" height="60">
             <div class="nav-links">
                 <ul class="flex">
                     <li class="hover-link" id="sports" onclick="onNavItemClick('sports')">Sports</li>
@@ -23,11 +21,12 @@
                     <li class="hover-link" id="business" onclick="onNavItemClick('business')">Business</li>
                 </ul>
             </div>
-          
             <div class="search-bar flex">
                 <input id="search-text" type="text" class="news-input" placeholder="e.g. SPORTS">
                 <button id="search-button" class="search-button">Search</button>
             </div>
+            <div class="login-icon">
+                <span id="login-text" class="hover-link">Login</span>            </div>
         </div>
     </nav>
 

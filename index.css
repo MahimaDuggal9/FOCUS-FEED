@@ -1,0 +1,182 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+/* Style for login link */
+.login-link {
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.login-link .hover-link {
+    font-size: 16px;
+    color: #007BFF;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.login-link .hover-link:hover {
+    color: #0056b3;
+}
+
+/* Style for login page */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.login-form {
+    background: white;
+    padding: 2em;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2 {
+    margin-bottom: 1em;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 0.5em;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navigation Styles */
+nav {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.main-nav {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.nav-links li:hover, .nav-links li.active {
+    text-decoration: underline;
+}
+
+.search-bar {
+    align-items: center;
+}
+
+.news-input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+.search-button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* Card Styles */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    overflow: hidden;
+    transition: transform 0.2s;
+    width: 30%;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-header img {
+    width: 100%;
+    height: auto;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.card-content h6 {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.card-content p {
+    margin: 0;
+    font-size: 1em;
+    color: #777;
+}
+
+/* Flex Utility */
+.flex {
+    display: flex;
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - FOCUS FEED</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* Light blue background */
+        }
+        .register-container {
+            background: #ffffff;
+            padding: 2em 3em;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .register-form h2 {
+            margin-bottom: 1em;
+            color: black;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .register-form label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: black;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+        .register-form input {
+            width: 100%;
+            padding: 0.75em;
+            margin-bottom: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            font-size: 1em;
+        }
+        .register-form input::placeholder {
+            color: #888;
+        }
+        .register-form button {
+            width: 100%;
+            padding: 0.75em;
+            background-color: #28a745; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .register-form button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .login-link {
+            margin-top: 1.5em;
+            color: #007BFF;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s;
+        }
+        .login-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <form class="register-form" id="register-form">
+            <h2>Register</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+            
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link" onclick="window.location.href='login.html'">Already a user? Login</div>
+    </div>
+
+    <script>
+       document.getElementById('register-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
+
+    try {
+        const response = await fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password, confirmPassword }),
+        });
+
+        if (response.ok) {
+            window.location.href = 'login.html';
+        } else {
+            const error = await response.text();
+            alert(`Registration failed: ${error}`);
+        }
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+});
+
+    </script>
+</body>
+</html>
